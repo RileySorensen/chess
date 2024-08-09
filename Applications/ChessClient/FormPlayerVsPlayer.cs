@@ -36,6 +36,24 @@ public partial class FormPlayerVsPlayer : Form
         ChessUtils.CreateTiles(panel1, _buttonArray, _board, panel1.Width / 8, Color1, Color2, false, tileClickEventHandler);
         ChessUtils.DrawSymbols(_buttonArray, _board);
     }
+    public FormPlayerVsPlayer(bool isChess960)
+    {
+        InitializeComponent();
+        this.Icon = new Icon("icon.ico");
+        this.StartPosition = FormStartPosition.CenterScreen;
+        this.MinimumSize = this.Size;
+
+        _board = new Board(BOARDSIZE, false);
+        //_board.AddPiece<King>(2, 4, 'b');
+        //_board.AddPiece<Queen>(3, 3, 'b');
+        //_board.AddPiece<King>(7, 4, 'w');
+        //_board.AddPiece<Queen>(6, 1, 'w');
+        _board.OnKingChecked += _board_OnKingChecked;
+
+        ChessUtils.CreateTiles(panel1, _buttonArray, _board, panel1.Width / 8, Color1, Color2, false, tileClickEventHandler);
+        ChessUtils.DrawSymbols(_buttonArray, _board);
+    }
+
 
     private void _board_OnKingChecked(King? kingThatIsChecked)
     {
@@ -146,7 +164,15 @@ public partial class FormPlayerVsPlayer : Form
     private void btnReset_Click(object sender, EventArgs e)
     {
         // reset the game 
-        _board = new Board(BOARDSIZE, true);
+        if (_board.isChess960)
+        {
+            _board = new Board(BOARDSIZE, false);
+        }
+        else {
+            _board = new Board(BOARDSIZE, true);
+        }
+
+        
 
         if (_turn == 'b')
             SwapTurns();

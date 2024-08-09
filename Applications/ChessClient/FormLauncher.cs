@@ -25,6 +25,12 @@ public partial class FormLauncher : Form
         frmPvP.Show();
     }
 
+    private void btn_Chess960(object sender, EventArgs e)
+    {
+        FormPlayerVsPlayer frmPvP = new FormPlayerVsPlayer(false);
+        frmPvP.Show();
+    }
+
     private void btnPlayerVsAI_Click(object sender, EventArgs e)
     {
         MessageBox.Show("Not implemented");
@@ -78,8 +84,7 @@ public partial class FormLauncher : Form
             }
 
         }
-
-
-
     }
+
+
 }

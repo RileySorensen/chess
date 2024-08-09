@@ -28,6 +28,7 @@ namespace Chess.Core
         #region fields
 
         const int DEFAULT_SIZE = 8;
+        public bool isChess960 = false;
 
         private Tile[,] _tiles;
         public Stack<Tuple<BoardLocation, BoardLocation, IPiece?>> MoveStack = new Stack<Tuple<BoardLocation, BoardLocation, IPiece?>>();
@@ -65,7 +66,11 @@ namespace Chess.Core
             {
                 AddDefaultPieces();
                 _blackKingLocation = new BoardLocation(0, 4);
-                _whiteKingLocation = new BoardLocation(7, 4);
+                _whiteKingLocation = new BoardLocation(7, 4);   
+            }
+            else {
+                AddRandomPieces();
+                isChess960 = true;
             }
         }
          
@@ -93,6 +98,209 @@ namespace Chess.Core
                 for (int j = 0; j < columns; j++)
                 {
                     _tiles[i, j] = new Tile(i, j);
+                }
+            }
+        }
+        private bool checkIfEmpty(int i, int j)
+        {
+            if (_tiles[i, j].Piece == null) return true;
+            else return false;
+
+        }
+        private void placePiece(int index, bool isWhite, int i, int j)
+        {
+            if (isWhite)
+            {
+                switch (index)
+                {
+                    case 0:
+                        _tiles[i, j].Piece = new Rook('w', i, j);
+                        break;
+                    case 1:
+                        _tiles[i, j].Piece = new Knight('w', i, j);
+                        break;
+                    case 2:
+                        _tiles[i, j].Piece = new Bishop('w', i, j);
+                        break;
+                    case 3:
+                        _tiles[i, j].Piece = new Queen('w', i, j);
+                        break;
+                    case 4:
+                        _tiles[i, j].Piece = new King('w', i, j);
+                        _whiteKingLocation = new BoardLocation(i, j);
+                        break;
+                }
+            }
+            else {
+                switch (index)
+                {
+                    case 0:
+                        _tiles[i, j].Piece = new Rook('b', i, j);
+                        break;
+                    case 1:
+                        _tiles[i, j].Piece = new Knight('b', i, j);
+                        break;
+                    case 2:
+                        _tiles[i, j].Piece = new Bishop('b', i, j);
+                        break;
+                    case 3:
+                        _tiles[i, j].Piece = new Queen('b', i, j);
+                        break;
+                    case 4:
+                        _tiles[i, j].Piece = new King('b', i, j);
+                        _blackKingLocation = new BoardLocation(i, j);
+                        break;
+                }
+            }
+
+        }
+
+        private void AddRandomPieces()
+        {
+            //Each array holds the amount needed for each piece
+            //{rook, knight, bishops, queen, king}
+            int[] WPieces = { 2, 2, 2, 1, 1 };
+            int[] BPieces = { 2, 2, 2, 1, 1 };
+            Random random = new Random();
+            //loop through each tile in 2d array and add pieces to board tiles
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == 1)
+                        _tiles[i, j].Piece = new Pawn('b', i, j); // adds 8 player black pawns to 2nd row
+                    if (i == 6)
+                        _tiles[i, j].Piece = new Pawn('w', i, j); // adds 8 white pawns to 7th row
+
+                    // player 1's backrow
+                    if (i == 7)
+                    {
+                        if (j == 0 || j == 7) {
+                            while (true) {
+                                int piece = random.Next(0, 5);
+                                if (WPieces[piece] > 0)
+                                {
+                                    placePiece(piece, true, i, j);
+                                    WPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                             
+                        if (j == 1 || j == 6){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (WPieces[piece]  > 0)
+                                {
+                                    placePiece(piece, true, i, j);
+                                    WPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (j == 2 || j == 5){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (WPieces[piece] > 0)
+                                {
+                                    placePiece(piece, true, i, j);
+                                    WPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }; 
+                        if (j == 3){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (WPieces[piece] > 0)
+                                {
+                                    placePiece(piece, true, i, j);
+                                    WPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        } 
+                        if (j == 4){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (WPieces[piece] > 0)
+                                {
+                                    placePiece(piece, true, i, j);
+                                    WPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // player 2's backrow
+                    if (i == 0)
+                    {
+                        if (j == 0 || j == 7){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (BPieces[piece] > 0)
+                                {
+                                    placePiece(piece, false, i, j);
+                                    BPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (j == 1 || j == 6){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (BPieces[piece] > 0)
+                                {
+                                    placePiece(piece, false, i, j);
+                                    BPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (j == 2 || j == 5){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (BPieces[piece] > 0)
+                                {
+                                    placePiece(piece, false, i, j);
+                                    BPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (j == 3){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (BPieces[piece] > 0)
+                                {
+                                    placePiece(piece, false, i, j);
+                                    BPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (j == 4){
+                            while (true)
+                            {
+                                int piece = random.Next(0, 5);
+                                if (BPieces[piece] > 0)
+                                {
+                                    placePiece(piece, false, i, j);
+                                    BPieces[piece] -= 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
